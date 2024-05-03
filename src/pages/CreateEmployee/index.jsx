@@ -1,12 +1,24 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import DatePicker from 'react-datepicker'
+import Modal from 'react-modal'
 import 'react-datepicker/dist/react-datepicker.css'
 import styles from './styles.module.css'
+
+Modal.setAppElement('#root')
 
 function CreateEmployee() {
     const [birthDate, setBirthDate] = useState(new Date())
     const [startDate, setStartDate] = useState(new Date())
+    const [modalIsOpen, setModalIsOpen] = useState(false)
+
+    function openModal() {
+        setModalIsOpen(true)
+    }
+
+    function closeModal() {
+        setModalIsOpen(false)
+    }
 
     return (
         <main>
@@ -62,11 +74,21 @@ function CreateEmployee() {
                         <option>Legal</option>
                     </select>
                 </form>
-                <button>Save</button>
+                <button onClick={openModal}>Save</button>
             </div>
-            <div id="confirmation" className="modal">
-                Employee Created!
-            </div>
+            <Modal
+                isOpen={modalIsOpen}
+                onRequestClose={closeModal}
+                contentLabel="Confirmation Modal"
+                className={styles.modal}
+            >
+                <div className={styles.modalContent}>
+                    <button className={styles.modalClose} onClick={closeModal}>
+                        X
+                    </button>
+                    <p>Employee Created!</p>
+                </div>
+            </Modal>
         </main>
     )
 }
