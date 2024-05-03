@@ -1,7 +1,13 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
 import styles from './styles.module.css'
 
 function CreateEmployee() {
+    const [birthDate, setBirthDate] = useState(new Date())
+    const [startDate, setStartDate] = useState(new Date())
+
     return (
         <main>
             <div className={styles.title}>
@@ -18,10 +24,18 @@ function CreateEmployee() {
                     <input type="text" id="last-name"></input>
 
                     <label htmlFor="date-of-birth">Date of Birth</label>
-                    <input id="date-of-birth" type="text"></input>
+                    <DatePicker
+                        id="date-of-birth"
+                        selected={birthDate}
+                        onChange={(date) => setBirthDate(date)}
+                    />
 
                     <label htmlFor="start-date">Start Date</label>
-                    <input id="start-date" type="text"></input>
+                    <DatePicker
+                        id="start-date"
+                        selected={startDate}
+                        onChange={(date) => setStartDate(date)}
+                    />
 
                     <fieldset className={styles.address}>
                         <legend>Address</legend>
