@@ -1,14 +1,44 @@
-import React, { useState } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import styles from './styles.module.css'
 
-function SelectMenu({ options, defaultValue }) {
+function SelectMenu({ options, defaultValue, onChange }) {
     const [isOpen, setIsOpen] = useState(false)
     const [selectedOption, setSelectedOption] = useState(defaultValue)
 
-    const handleOptionClick = (option) => {
-        setSelectedOption(option)
-        setIsOpen(false)
-    }
+    useEffect(() => {
+        setSelectedOption(defaultValue)
+    }, [defaultValue])
+
+    const memoizedOptions = useMemo(() => options, [options])
+
+    const handleOptionClick = useCallback(
+        (option) => {
+            setSelectedOption(option)
+            setIsOpen(false)
+            if (onChange) {
+                onChange(option.value)
+            }
+        },
+        [onChange]
+    )
+
+    const handleSelectChange = useCallback(
+        (e) => {
+            const selectedValue = e.target.value
+            const selected = memoizedOptions.find(
+                (option) => option.value === selectedValue
+            )
+            setSelectedOption(selected)
+            if (onChange) {
+                onChange(selected.value)
+            }
+        },
+        [memoizedOptions, onChange]
+    )
+
+    const toggleMenu = useCallback(() => {
+        setIsOpen((prev) => !prev)
+    }, [])
 
     return (
         <div className={styles.selectMenu}>
@@ -16,14 +46,14 @@ function SelectMenu({ options, defaultValue }) {
                 className={`${styles.selectMenuHeader} ${
                     isOpen ? styles.open : ''
                 }`}
-                onClick={() => setIsOpen(!isOpen)}
+                onClick={toggleMenu}
                 tabIndex="0"
             >
                 {selectedOption ? selectedOption.label : 'Select an option'}
             </div>
             {isOpen && (
                 <ul className={styles.selectMenuOptions}>
-                    {options.map((option) => (
+                    {memoizedOptions.map((option) => (
                         <li
                             key={option.value}
                             className={styles.selectMenuOption}
@@ -38,15 +68,9 @@ function SelectMenu({ options, defaultValue }) {
             <select
                 style={{ display: 'none' }}
                 value={selectedOption ? selectedOption.value : ''}
-                onChange={(e) => {
-                    const selectedValue = e.target.value
-                    const selected = options.find(
-                        (option) => option.value === selectedValue
-                    )
-                    setSelectedOption(selected)
-                }}
+                onChange={handleSelectChange}
             >
-                {options.map((option) => (
+                {memoizedOptions.map((option) => (
                     <option key={option.value} value={option.value}>
                         {option.label}
                     </option>
