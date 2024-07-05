@@ -1,13 +1,14 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, lazy, Suspense } from 'react'
 import { Link } from 'react-router-dom'
 import Title from '../../components/Title'
-import DatePicker from 'react-datepicker'
 import Modal from 'react-modal'
 import SelectMenu from 'react-simple-select-menu'
 import { useDispatch } from 'react-redux'
 import { add } from '../../redux/features/employee/employee.slice'
 import 'react-datepicker/dist/react-datepicker.css'
 import styles from './styles.module.css'
+
+const DatePicker = lazy(() => import('react-datepicker'))
 
 Modal.setAppElement('#root')
 
@@ -361,22 +362,28 @@ function CreateEmployee() {
                     ></input>
 
                     <label htmlFor="dateOfBirth">Date of Birth</label>
-                    <DatePicker
-                        id="dateOfBirth"
-                        name="dateOfBirth"
-                        selected={formData.dateOfBirth}
-                        onChange={(date) =>
-                            handleDateChange('dateOfBirth', date)
-                        }
-                    />
+                    <Suspense fallback={null}>
+                        <DatePicker
+                            id="dateOfBirth"
+                            name="dateOfBirth"
+                            selected={formData.dateOfBirth}
+                            onChange={(date) =>
+                                handleDateChange('dateOfBirth', date)
+                            }
+                        />
+                    </Suspense>
 
                     <label htmlFor="startDate">Start Date</label>
-                    <DatePicker
-                        id="startDate"
-                        name="startDate"
-                        selected={formData.startDate}
-                        onChange={(date) => handleDateChange('startDate', date)}
-                    />
+                    <Suspense fallback={null}>
+                        <DatePicker
+                            id="startDate"
+                            name="startDate"
+                            selected={formData.startDate}
+                            onChange={(date) =>
+                                handleDateChange('startDate', date)
+                            }
+                        />
+                    </Suspense>
 
                     <fieldset className={styles.address}>
                         <legend>Address</legend>
