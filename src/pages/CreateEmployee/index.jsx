@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import Title from '../../components/Title'
 import DatePicker from 'react-datepicker'
 import Modal from 'react-modal'
-import SelectMenu from '../../components/SelectMenu'
+import SelectMenu from 'react-simple-select-menu'
 import { useDispatch } from 'react-redux'
 import { add } from '../../redux/features/employee/employee.slice'
 import 'react-datepicker/dist/react-datepicker.css'
@@ -262,11 +262,6 @@ const stateOptions = [
     }
 ]
 
-const initialState = {
-    label: 'Alabama',
-    value: 'AL'
-}
-
 const departmentOptions = [
     {
         label: 'Sales',
@@ -289,11 +284,6 @@ const departmentOptions = [
         value: 'Legal'
     }
 ]
-
-const initialDepartment = {
-    label: 'Sales',
-    value: 'Sales'
-}
 
 function CreateEmployee() {
     const [formData, setFormData] = useState(initialFormData)
@@ -412,7 +402,7 @@ function CreateEmployee() {
                         <label htmlFor="state">State</label>
                         <SelectMenu
                             options={stateOptions}
-                            defaultValue={initialState}
+                            defaultValue={stateOptions[0]}
                             onChange={(selected) =>
                                 handleSelectChange('state', selected)
                             }
@@ -431,7 +421,7 @@ function CreateEmployee() {
                     <label htmlFor="department">Department</label>
                     <SelectMenu
                         options={departmentOptions}
-                        defaultValue={initialDepartment}
+                        defaultValue={departmentOptions[0]}
                         onChange={(selected) =>
                             handleSelectChange('department', selected)
                         }
